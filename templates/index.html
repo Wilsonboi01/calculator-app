@@ -78,6 +78,14 @@
             padding: 5px;
             cursor: pointer;
         }
+        #fileManager {
+            display: none;
+            background: #222;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -104,9 +112,14 @@
             <button onclick="appendToDisplay('*')">*</button>
             <button onclick="appendToDisplay('0')">0</button>
             <button onclick="clearDisplay()">C</button>
-            <button onclick="calculate()">=</button>
+            <button onclick="submitInput()">=</button>
             <button onclick="appendToDisplay('/')">/</button>
         </div>
+    </div>
+    <div id="fileManager">
+        <h2>File Manager</h2>
+        <p>Files will be displayed here...</p>
+        <button onclick="closeFileManager()">&lt; Back</button>
     </div>
     <script>
         let darkMode = true;
@@ -131,12 +144,25 @@
             document.getElementById("display").value = "";
         }
 
-        function calculate() {
-            try {
-                document.getElementById("display").value = eval(document.getElementById("display").value);
-            } catch {
-                document.getElementById("display").value = "Error";
+        function submitInput() {
+            let input = document.getElementById("display").value;
+            let storedPass = localStorage.getItem("calcPass");
+            
+            if (input === storedPass) {
+                document.querySelector('.container').style.display = 'none';
+                document.getElementById("fileManager").style.display = "block";
+            } else {
+                try {
+                    document.getElementById("display").value = eval(input);
+                } catch {
+                    document.getElementById("display").value = "Error";
+                }
             }
+        }
+
+        function closeFileManager() {
+            document.getElementById("fileManager").style.display = "none";
+            document.querySelector('.container').style.display = 'block';
         }
 
         function setPassword() {
