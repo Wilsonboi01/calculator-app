@@ -157,12 +157,15 @@
 
         function saveFile() {
             const fileInput = document.getElementById("fileInput");
-            Array.from(fileInput.files).forEach(file => savedFiles.files.push(file.name));
+            Array.from(fileInput.files).forEach(file => {
+                let type = file.type.includes("audio") ? "music" : file.type.includes("video") ? "videos" : file.type.includes("image") ? "photos" : "files";
+                savedFiles[type].push(file.name);
+            });
             alert("Files Saved!");
         }
         
         function unsaveFiles() {
-            savedFiles.files = [];
+            savedFiles = { files: [], music: [], videos: [], photos: [] };
             alert("Files Unsaved!");
         }
     </script>
