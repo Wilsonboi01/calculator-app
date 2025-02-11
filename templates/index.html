@@ -150,50 +150,35 @@
                 <span class="category" onclick="showCategory('videos')">Videos</span>
                 <span class="category" onclick="showCategory('photos')">Photos</span>
             </div>
-            <input type="file" id="fileInput" accept="audio/*,video/*,image/*">
+            <input type="file" id="fileInput" accept="*">
             <button onclick="saveFile()">Save File</button>
             <button onclick="unsaveFiles()">Unsave Files</button>
+            <ul id="savedFiles"></ul>
         </div>
     </div>
     <script>
-        let password = "";
-        function insert(value) {
-            document.querySelector('.display').value += value;
-        }
-        function clearDisplay() {
-            document.querySelector('.display').value = '';
-        }
-        function calculate() {
-            let input = document.querySelector('.display').value;
-            if (input === password) {
-                document.querySelector('.calculator').style.display = 'none';
-                document.querySelector('.file-manager').style.display = 'block';
-            } else {
-                try {
-                    document.querySelector('.display').value = eval(input);
-                } catch {
-                    alert("Invalid expression!");
-                }
+        let savedFiles = { files: [], music: [], videos: [], photos: [] };
+        function saveFile() {
+            let fileInput = document.getElementById("fileInput");
+            let file = fileInput.files[0];
+            if (file) {
+                let category = "files";
+                if (file.type.startsWith("audio")) category = "music";
+                else if (file.type.startsWith("video")) category = "videos";
+                else if (file.type.startsWith("image")) category = "photos";
+                savedFiles[category].push(file.name);
+                alert("File saved successfully!");
             }
         }
-        function toggleMode() {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
-        }
-        function toggleMenu() {
-            const menu = document.querySelector('.menu-options');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-        function setPassword() {
-            let newPassword = prompt("Enter new password:");
-            if (newPassword) {
-                password = newPassword;
-                alert("Password set successfully!");
+        function unsaveFiles() {
+            let category = prompt("Enter category (files, music, videos, photos) to unsave:");
+            if (savedFiles[category]) {
+                savedFiles[category] = [];
+                alert("Files unsaved from " + category);
             }
         }
-        function removePassword() {
-            password = "";
-            alert("Password removed!");
+        function showCategory(category) {
+            alert("Saved " + category + ": " + savedFiles[category].join(", "));
         }
     </script>
 </body>
