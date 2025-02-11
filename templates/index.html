@@ -6,111 +6,143 @@
     <title>Scientific Calculator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            background-color: white;
+            transition: background-color 0.3s;
         }
         .calculator {
-            width: 300px;
+            width: 320px;
             margin: 50px auto;
             padding: 20px;
             border-radius: 10px;
             background-color: white;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
         }
         .display {
             width: 100%;
             height: 50px;
-            font-size: 24px;
+            font-size: 1.5em;
             text-align: right;
             padding: 10px;
-            border: none;
-            background-color: #e3e3e3;
+            margin-bottom: 10px;
             border-radius: 5px;
+            border: none;
         }
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 20px;
+            gap: 5px;
         }
         button {
             padding: 15px;
-            font-size: 18px;
+            font-size: 1.2em;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background 0.3s;
         }
-        .digit { background-color: lightblue; }
-        .operator { background-color: orange; }
-        .toggle-btn { background-color: gray; }
-        .menu-btn { background-color: black; color: white; }
+        .digits button {
+            background-color: blue;
+            color: white;
+        }
+        .operators button {
+            background-color: orange;
+            color: white;
+        }
+        .scientific {
+            grid-column: span 4;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .scientific button {
+            background-color: gray;
+            color: white;
+        }
+        .toggle-dark {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .menu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .dark-mode {
+            background-color: black;
+        }
+        .dark-mode .calculator {
+            background-color: black;
+        }
+        .dark-mode .display {
+            background-color: black;
+            color: white;
+        }
+        .dark-mode button {
+            background-color: black;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <h2 id="title">WILSONBOI</h2>
-    <button id="toggle" class="toggle-btn">🔆</button>
-    <button id="menu" class="menu-btn">☰</button>
+    <button class="toggle-dark">Toggle Light</button>
+    <button class="menu">☰</button>
     <div class="calculator">
-        <input type="text" id="display" class="display" disabled>
+        <input type="text" class="display" disabled>
+        <div class="scientific">
+            <button onclick="insert('sin(')">sin</button>
+            <button onclick="insert('cos(')">cos</button>
+            <button onclick="insert('tan(')">tan</button>
+            <button onclick="insert('log(')">log</button>
+            <button onclick="insert('√(')">√</button>
+        </div>
         <div class="buttons">
-            <button class="digit" onclick="appendToDisplay('7')">7</button>
-            <button class="digit" onclick="appendToDisplay('8')">8</button>
-            <button class="digit" onclick="appendToDisplay('9')">9</button>
-            <button class="operator" onclick="appendToDisplay('/')">/</button>
-            
-            <button class="digit" onclick="appendToDisplay('4')">4</button>
-            <button class="digit" onclick="appendToDisplay('5')">5</button>
-            <button class="digit" onclick="appendToDisplay('6')">6</button>
-            <button class="operator" onclick="appendToDisplay('*')">*</button>
-            
-            <button class="digit" onclick="appendToDisplay('1')">1</button>
-            <button class="digit" onclick="appendToDisplay('2')">2</button>
-            <button class="digit" onclick="appendToDisplay('3')">3</button>
-            <button class="operator" onclick="appendToDisplay('-')">-</button>
-            
-            <button class="digit" onclick="appendToDisplay('0')">0</button>
-            <button class="operator" onclick="appendToDisplay('.')">.</button>
-            <button class="operator" onclick="calculate()">=</button>
-            <button class="operator" onclick="appendToDisplay('+')">+</button>
-            
-            <button class="operator" onclick="appendToDisplay('Math.sin(')">sin</button>
-            <button class="operator" onclick="appendToDisplay('Math.cos(')">cos</button>
-            <button class="operator" onclick="appendToDisplay('Math.tan(')">tan</button>
-            <button class="operator" onclick="appendToDisplay('Math.log(')">log</button>
-            
-            <button class="operator" onclick="appendToDisplay('Math.pow(')">x^y</button>
-            <button class="operator" onclick="appendToDisplay('Math.sqrt(')">√</button>
-            <button class="operator" onclick="appendToDisplay('!')">x!</button>
-            <button class="operator" onclick="clearDisplay()">C</button>
+            <div class="digits">
+                <button onclick="insert('7')">7</button>
+                <button onclick="insert('8')">8</button>
+                <button onclick="insert('9')">9</button>
+                <button onclick="insert('4')">4</button>
+                <button onclick="insert('5')">5</button>
+                <button onclick="insert('6')">6</button>
+                <button onclick="insert('1')">1</button>
+                <button onclick="insert('2')">2</button>
+                <button onclick="insert('3')">3</button>
+                <button onclick="insert('0')">0</button>
+            </div>
+            <div class="operators">
+                <button onclick="insert('+')">+</button>
+                <button onclick="insert('-')">-</button>
+                <button onclick="insert('*')">*</button>
+                <button onclick="insert('/')">/</button>
+                <button onclick="calculate()">=</button>
+                <button onclick="clearDisplay()">C</button>
+            </div>
         </div>
     </div>
-
     <script>
-        function appendToDisplay(value) {
-            document.getElementById("display").value += value;
-        }
-        function clearDisplay() {
-            document.getElementById("display").value = "";
+        function insert(value) {
+            document.querySelector('.display').value += value;
         }
         function calculate() {
             try {
-                let expression = document.getElementById("display").value;
-                expression = expression.replace(/\bMath\./g, '');
-                expression = expression.replace(/\b!\b/g, 'factorial(');
-                document.getElementById("display").value = eval(expression);
-            } catch (e) {
-                document.getElementById("display").value = "Error";
+                document.querySelector('.display').value = eval(document.querySelector('.display').value);
+            } catch {
+                document.querySelector('.display').value = 'Error';
             }
         }
-        function factorial(n) {
-            return n <= 1 ? 1 : n * factorial(n - 1);
+        function clearDisplay() {
+            document.querySelector('.display').value = '';
         }
-        document.getElementById("toggle").addEventListener("click", function() {
-            document.body.style.backgroundColor = document.body.style.backgroundColor === "black" ? "white" : "black";
-        });
-        document.getElementById("menu").addEventListener("click", function() {
-            alert("Menu Clicked! Settings will be added later.");
+        document.querySelector('.toggle-dark').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
         });
     </script>
 </body>
