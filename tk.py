@@ -1,3 +1,13 @@
+from flask import Flask
+
+app = Flask(__name__)  # Make sure this exists!
+
+@app.route("/")
+def home():
+    return "Hello, World!"
+
+if __name__ == "__main__":
+    app.run()
 from tkinter import ttk, messagebox
 import pygame
 from tkinter import messagebox
