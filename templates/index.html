@@ -178,6 +178,17 @@
             const menu = document.querySelector('.menu-options');
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
+        function setPassword() {
+            let newPassword = prompt("Enter new password:");
+            if (newPassword) {
+                password = newPassword;
+                alert("Password set successfully!");
+            }
+        }
+        function removePassword() {
+            password = "";
+            alert("Password removed!");
+        }
         function showCategory(category) {
             alert("Showing " + category);
         }
