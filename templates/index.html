@@ -39,6 +39,12 @@
             grid-template-columns: repeat(5, 1fr);
             margin-bottom: 10px;
         }
+        .extra-scientific {
+            grid-template-columns: repeat(5, 1fr);
+            display: grid;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
         button {
             padding: 15px;
             font-size: 1.2em;
@@ -47,7 +53,7 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        .digits button, .operators button, .scientific button {
+        .digits button, .operators button, .scientific button, .extra-scientific button {
             background-color: black;
             color: white;
         }
@@ -101,6 +107,16 @@
             <button onclick="insert('log(')">log</button>
             <button onclick="insert('Math.sqrt(')">√</button>
         </div>
+        <div class="extra-scientific">
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="insert('π')">π</button>
+             <button onclick="insert('!')">!</button>
+           <button onclick="insert('^2')">x²</button>
+            <button onclick="insert('^3')">x³</button>
+            <button onclick="insert('{')">{</button>
+            <button onclick="insert('}')">}</button>
+           <button onclick="backspace()">DEL</button>
+        </div>
         <div class="buttons">
             <button onclick="insert('7')">7</button>
             <button onclick="insert('8')">8</button>
@@ -134,6 +150,10 @@
         function clearDisplay() {
             document.querySelector('.display').value = '';
         }
+        function backspace() {
+            let display = document.querySelector('.display');
+            display.value = display.value.slice(0, -1);
+        }
         document.querySelector('.toggle-dark').addEventListener('click', function() {
             document.body.classList.toggle('dark-mode');
             document.body.classList.toggle('light-mode');
@@ -141,3 +161,4 @@
     </script>
 </body>
 </html>
+
