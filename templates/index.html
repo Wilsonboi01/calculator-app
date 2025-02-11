@@ -24,9 +24,8 @@
             background-color: white;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s;
-            display: none;
         }
-        .calculator { display: block; }
+        .file-manager { display: none; }
         .display {
             width: 100%;
             height: 50px;
@@ -54,20 +53,13 @@
             background-color: black;
             color: white;
         }
-        .toggle-dark, .toggle-file-manager {
+        .toggle-dark, .menu {
             position: absolute;
             top: 10px;
-            left: 10px;
-            padding: 10px;
             cursor: pointer;
         }
-        .menu {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px;
-            cursor: pointer;
-        }
+        .toggle-dark { left: 10px; }
+        .menu { right: 10px; }
         .dark-mode {
             background-color: black;
         }
@@ -75,10 +67,6 @@
             background-color: black;
         }
         .dark-mode .display {
-            background-color: black;
-            color: white;
-        }
-        .dark-mode button {
             background-color: black;
             color: white;
         }
@@ -93,12 +81,18 @@
         .file-manager input {
             margin-bottom: 10px;
         }
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <button class="toggle-dark">Toggle Light</button>
     <button class="menu">☰</button>
-    <button class="toggle-file-manager">File Manager</button>
     <div class="container">
         <div class="calculator">
             <input type="text" class="display" disabled>
@@ -117,11 +111,12 @@
                 <button class="operators" onclick="insert('*')">*</button>
                 <button onclick="insert('0')">0</button>
                 <button onclick="clearDisplay()">C</button>
-                <button onclick="calculate()">=</button>
+                <button onclick="checkPassword()">=</button>
                 <button class="operators" onclick="insert('/')">/</button>
             </div>
         </div>
         <div class="file-manager">
+            <button class="back-btn" onclick="goBack()">&#x3c;</button>
             <h2>File Manager</h2>
             <input type="file" id="fileInput">
             <button onclick="saveFile()">Save File</button>
@@ -130,26 +125,36 @@
         </div>
     </div>
     <script>
+        let password = "";
         function insert(value) {
             document.querySelector('.display').value += value;
         }
-        function calculate() {
-            try {
-                document.querySelector('.display').value = eval(document.querySelector('.display').value);
-            } catch {
-                document.querySelector('.display').value = 'Error';
-            }
-        }
         function clearDisplay() {
             document.querySelector('.display').value = '';
+        }
+        function checkPassword() {
+            if (document.querySelector('.display').value === password) {
+                document.querySelector('.calculator').style.display = 'none';
+                document.querySelector('.file-manager').style.display = 'block';
+                document.querySelector('.back-btn').style.display = 'block';
+                clearDisplay();
+            }
+        }
+        function goBack() {
+            document.querySelector('.calculator').style.display = 'block';
+            document.querySelector('.file-manager').style.display = 'none';
+            document.querySelector('.back-btn').style.display = 'none';
         }
         document.querySelector('.toggle-dark').addEventListener('click', function() {
             document.body.classList.toggle('dark-mode');
             document.body.classList.toggle('light-mode');
         });
-        document.querySelector('.toggle-file-manager').addEventListener('click', function() {
-            document.querySelector('.calculator').style.display = 'none';
-            document.querySelector('.file-manager').style.display = 'block';
+        document.querySelector('.menu').addEventListener('click', function() {
+            let newPassword = prompt("Set or remove password (Leave empty to remove)");
+            if (newPassword !== null) {
+                password = newPassword;
+                alert("Password updated!");
+            }
         });
         function saveFile() {
             const fileInput = document.getElementById('fileInput');
@@ -167,6 +172,7 @@
     </script>
 </body>
 </html>
+
 
 
 
