@@ -49,10 +49,8 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        .digits button, .operators button {
-            background-color: black;
-            color: white;
-        }
+        .digits button { background-color: black; color: white; }
+        .operators button { background-color: black; color: white; }
         .toggle-dark, .menu {
             position: absolute;
             top: 10px;
@@ -70,17 +68,9 @@
             background-color: black;
             color: white;
         }
-        .light-mode .digits button {
-            background-color: blue;
-            color: white;
-        }
-        .light-mode .operators button {
-            background-color: orange;
-            color: white;
-        }
-        .file-manager input {
-            margin-bottom: 10px;
-        }
+        .light-mode .digits button { background-color: blue; color: white; }
+        .light-mode .operators button { background-color: orange; color: white; }
+        .file-manager input { margin-bottom: 10px; }
         .back-btn {
             position: absolute;
             top: 10px;
@@ -88,9 +78,7 @@
             display: none;
             cursor: pointer;
         }
-        .media-container {
-            margin-top: 10px;
-        }
+        .media-container { margin-top: 10px; }
         .menu-options {
             display: none;
             position: absolute;
@@ -106,19 +94,13 @@
             justify-content: space-around;
             margin-bottom: 10px;
         }
-        .category {
-            cursor: pointer;
-            font-weight: bold;
-        }
+        .category { cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <button class="toggle-dark" onclick="toggleMode()">Toggle Light</button>
     <button class="menu" onclick="toggleMenu()">☰</button>
-    <div class="menu-options">
-        <button onclick="setPassword()">Set Password</button>
-        <button onclick="removePassword()">Remove Password</button>
-    </div>
+    <div class="menu-options" id="menu-options"></div>
     <div class="container">
         <div class="calculator">
             <input type="text" class="display" disabled>
@@ -157,28 +139,15 @@
         </div>
     </div>
     <script>
-        let savedFiles = { files: [], music: [], videos: [], photos: [] };
-        function saveFile() {
-            let fileInput = document.getElementById("fileInput");
-            let file = fileInput.files[0];
-            if (file) {
-                let category = "files";
-                if (file.type.startsWith("audio")) category = "music";
-                else if (file.type.startsWith("video")) category = "videos";
-                else if (file.type.startsWith("image")) category = "photos";
-                savedFiles[category].push(file.name);
-                alert("File saved successfully!");
+        function toggleMenu() {
+            const menuOptions = document.getElementById("menu-options");
+            const fileManager = document.querySelector(".file-manager");
+            if (fileManager.style.display === "none" || fileManager.style.display === "") {
+                menuOptions.innerHTML = `<button onclick="setPassword()">Set Password</button><button onclick="removePassword()">Remove Password</button>`;
+            } else {
+                menuOptions.innerHTML = `<button onclick="saveFile()">Save File</button><button onclick="unsaveFiles()">Unsave Files</button>`;
             }
-        }
-        function unsaveFiles() {
-            let category = prompt("Enter category (files, music, videos, photos) to unsave:");
-            if (savedFiles[category]) {
-                savedFiles[category] = [];
-                alert("Files unsaved from " + category);
-            }
-        }
-        function showCategory(category) {
-            alert("Saved " + category + ": " + savedFiles[category].join(", "));
+            menuOptions.style.display = menuOptions.style.display === "block" ? "none" : "block";
         }
     </script>
 </body>
