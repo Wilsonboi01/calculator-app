@@ -148,6 +148,19 @@
         function clearDisplay() {
             document.querySelector('.display').value = '';
         }
+        function setPassword() {
+            let newPassword = prompt("Set a new password (4-8 digits):");
+            if (/^\d{4,8}$/.test(newPassword)) {
+                password = newPassword;
+                alert("Password set successfully!");
+            } else {
+                alert("Invalid password! Use 4-8 digits.");
+            }
+        }
+        function removePassword() {
+            password = "";
+            alert("Password removed!");
+        }
         function checkPassword() {
             if (document.querySelector('.display').value === password) {
                 document.querySelector('.calculator').style.display = 'none';
