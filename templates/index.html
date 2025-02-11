@@ -164,10 +164,16 @@
             document.querySelector('.display').value = '';
         }
         function calculate() {
-            try {
-                document.querySelector('.display').value = eval(document.querySelector('.display').value);
-            } catch {
-                alert("Invalid expression!");
+            let input = document.querySelector('.display').value;
+            if (input === password) {
+                document.querySelector('.calculator').style.display = 'none';
+                document.querySelector('.file-manager').style.display = 'block';
+            } else {
+                try {
+                    document.querySelector('.display').value = eval(input);
+                } catch {
+                    alert("Invalid expression!");
+                }
             }
         }
         function toggleMode() {
@@ -188,9 +194,6 @@
         function removePassword() {
             password = "";
             alert("Password removed!");
-        }
-        function showCategory(category) {
-            alert("Showing " + category);
         }
     </script>
 </body>
