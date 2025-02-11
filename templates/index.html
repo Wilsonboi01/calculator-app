@@ -123,7 +123,14 @@
             <h2>File Manager</h2>
             <input type="file" id="fileInput" accept="audio/*,video/*,image/*">
             <button onclick="saveFile()">Save File</button>
+            <button onclick="unsaveFiles()">Unsave Files</button>
             <h3>Saved Files</h3>
+            <div id="categories">
+                <button onclick="showCategory('files')">Files</button>
+                <button onclick="showCategory('music')">Music</button>
+                <button onclick="showCategory('videos')">Videos</button>
+                <button onclick="showCategory('photos')">Photos</button>
+            </div>
             <ul id="fileList"></ul>
             <div class="media-container">
                 <audio id="audioPlayer" controls style="display: none;"></audio>
@@ -134,6 +141,7 @@
     </div>
     <script>
         let password = "";
+        let files = { files: [], music: [], videos: [], photos: [] };
         function insert(value) {
             document.querySelector('.display').value += value;
         }
@@ -153,48 +161,26 @@
             document.querySelector('.file-manager').style.display = 'none';
             document.querySelector('.back-btn').style.display = 'none';
         }
-        document.querySelector('.toggle-dark').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
-        });
-        document.querySelector('.menu').addEventListener('click', function() {
-            let newPassword = prompt("Set or remove password (Leave empty to remove)");
-            if (newPassword !== null) {
-                password = newPassword;
-                alert("Password updated!");
-            }
-        });
         function saveFile() {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
             if (file) {
-                const fileName = file.name;
-                const fileList = document.getElementById('fileList');
-                const listItem = document.createElement('li');
-                listItem.textContent = fileName;
-                listItem.onclick = function() { viewFile(file); };
-                fileList.appendChild(listItem);
+                let category = file.type.startsWith('audio') ? 'music' : file.type.startsWith('video') ? 'videos' : file.type.startsWith('image') ? 'photos' : 'files';
+                files[category].push(file.name);
                 alert('File saved successfully!');
-            } else {
-                alert('No file selected!');
             }
         }
-        function viewFile(file) {
-            const url = URL.createObjectURL(file);
-            if (file.type.startsWith('audio')) {
-                document.getElementById('audioPlayer').src = url;
-                document.getElementById('audioPlayer').style.display = 'block';
-            } else if (file.type.startsWith('video')) {
-                document.getElementById('videoPlayer').src = url;
-                document.getElementById('videoPlayer').style.display = 'block';
-            } else if (file.type.startsWith('image')) {
-                document.getElementById('imageDisplay').src = url;
-                document.getElementById('imageDisplay').style.display = 'block';
-            }
+        function unsaveFiles() {
+            files = { files: [], music: [], videos: [], photos: [] };
+            alert('Files unsaved successfully!');
+        }
+        function showCategory(category) {
+            alert(`Showing: ${category}`);
         }
     </script>
 </body>
 </html>
+
 
 
 
