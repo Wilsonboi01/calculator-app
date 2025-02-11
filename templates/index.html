@@ -95,6 +95,7 @@
             margin-bottom: 10px;
         }
         .category { cursor: pointer; font-weight: bold; }
+        #savedFiles { list-style: none; padding: 0; }
     </style>
 </head>
 <body>
@@ -103,7 +104,7 @@
     <div class="menu-options" id="menu-options"></div>
     <div class="container">
         <div class="calculator">
-            <input type="text" class="display" disabled>
+            <input type="text" class="display" id="calc-display" disabled>
             <div class="buttons">
                 <button onclick="insert('7')">7</button>
                 <button onclick="insert('8')">8</button>
@@ -132,22 +133,37 @@
                 <span class="category" onclick="showCategory('videos')">Videos</span>
                 <span class="category" onclick="showCategory('photos')">Photos</span>
             </div>
-            <input type="file" id="fileInput" accept="*">
+            <input type="file" id="fileInput" multiple>
             <button onclick="saveFile()">Save File</button>
             <button onclick="unsaveFiles()">Unsave Files</button>
             <ul id="savedFiles"></ul>
         </div>
     </div>
     <script>
+        let savedFiles = { files: [], music: [], videos: [], photos: [] };
+        
+        function toggleMode() {
+            document.body.classList.toggle("light-mode");
+        }
+
         function toggleMenu() {
             const menuOptions = document.getElementById("menu-options");
             const fileManager = document.querySelector(".file-manager");
-            if (fileManager.style.display === "none" || fileManager.style.display === "") {
-                menuOptions.innerHTML = `<button onclick="setPassword()">Set Password</button><button onclick="removePassword()">Remove Password</button>`;
-            } else {
-                menuOptions.innerHTML = `<button onclick="saveFile()">Save File</button><button onclick="unsaveFiles()">Unsave Files</button>`;
-            }
+            menuOptions.innerHTML = fileManager.style.display === "none" ? 
+                `<button onclick="setPassword()">Set Password</button><button onclick="removePassword()">Remove Password</button>` : 
+                `<button onclick="saveFile()">Save File</button><button onclick="unsaveFiles()">Unsave Files</button>`;
             menuOptions.style.display = menuOptions.style.display === "block" ? "none" : "block";
+        }
+
+        function saveFile() {
+            const fileInput = document.getElementById("fileInput");
+            Array.from(fileInput.files).forEach(file => savedFiles.files.push(file.name));
+            alert("Files Saved!");
+        }
+        
+        function unsaveFiles() {
+            savedFiles.files = [];
+            alert("Files Unsaved!");
         }
     </script>
 </body>
