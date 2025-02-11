@@ -91,11 +91,25 @@
         .media-container {
             margin-top: 10px;
         }
+        .menu-options {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
-    <button class="toggle-dark">Toggle Light</button>
-    <button class="menu">☰</button>
+    <button class="toggle-dark" onclick="toggleMode()">Toggle Light</button>
+    <button class="menu" onclick="toggleMenu()">☰</button>
+    <div class="menu-options">
+        <button onclick="setPassword()">Set Password</button>
+        <button onclick="removePassword()">Remove Password</button>
+    </div>
     <div class="container">
         <div class="calculator">
             <input type="text" class="display" disabled>
@@ -124,24 +138,10 @@
             <input type="file" id="fileInput" accept="audio/*,video/*,image/*">
             <button onclick="saveFile()">Save File</button>
             <button onclick="unsaveFiles()">Unsave Files</button>
-            <h3>Saved Files</h3>
-            <div id="categories">
-                <button onclick="showCategory('files')">Files</button>
-                <button onclick="showCategory('music')">Music</button>
-                <button onclick="showCategory('videos')">Videos</button>
-                <button onclick="showCategory('photos')">Photos</button>
-            </div>
-            <ul id="fileList"></ul>
-            <div class="media-container">
-                <audio id="audioPlayer" controls style="display: none;"></audio>
-                <video id="videoPlayer" controls style="display: none; width: 100%;"></video>
-                <img id="imageDisplay" style="display: none; width: 100%;">
-            </div>
         </div>
     </div>
     <script>
         let password = "";
-        let files = { files: [], music: [], videos: [], photos: [] };
         function insert(value) {
             document.querySelector('.display').value += value;
         }
@@ -161,21 +161,13 @@
             document.querySelector('.file-manager').style.display = 'none';
             document.querySelector('.back-btn').style.display = 'none';
         }
-        function saveFile() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            if (file) {
-                let category = file.type.startsWith('audio') ? 'music' : file.type.startsWith('video') ? 'videos' : file.type.startsWith('image') ? 'photos' : 'files';
-                files[category].push(file.name);
-                alert('File saved successfully!');
-            }
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
         }
-        function unsaveFiles() {
-            files = { files: [], music: [], videos: [], photos: [] };
-            alert('Files unsaved successfully!');
-        }
-        function showCategory(category) {
-            alert(`Showing: ${category}`);
+        function toggleMenu() {
+            const menu = document.querySelector('.menu-options');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
     </script>
 </body>
