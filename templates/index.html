@@ -101,6 +101,15 @@
             border-radius: 5px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+        }
+        .category {
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -128,13 +137,19 @@
                 <button class="operators" onclick="insert('*')">*</button>
                 <button onclick="insert('0')">0</button>
                 <button onclick="clearDisplay()">C</button>
-                <button onclick="checkPassword()">=</button>
+                <button onclick="calculate()">=</button>
                 <button class="operators" onclick="insert('/')">/</button>
             </div>
         </div>
         <div class="file-manager">
             <button class="back-btn" onclick="goBack()">&#x3c;</button>
             <h2>File Manager</h2>
+            <div class="categories">
+                <span class="category" onclick="showCategory('files')">Files</span>
+                <span class="category" onclick="showCategory('music')">Music</span>
+                <span class="category" onclick="showCategory('videos')">Videos</span>
+                <span class="category" onclick="showCategory('photos')">Photos</span>
+            </div>
             <input type="file" id="fileInput" accept="audio/*,video/*,image/*">
             <button onclick="saveFile()">Save File</button>
             <button onclick="unsaveFiles()">Unsave Files</button>
@@ -148,31 +163,12 @@
         function clearDisplay() {
             document.querySelector('.display').value = '';
         }
-        function setPassword() {
-            let newPassword = prompt("Set a new password (4-8 digits):");
-            if (/^\d{4,8}$/.test(newPassword)) {
-                password = newPassword;
-                alert("Password set successfully!");
-            } else {
-                alert("Invalid password! Use 4-8 digits.");
+        function calculate() {
+            try {
+                document.querySelector('.display').value = eval(document.querySelector('.display').value);
+            } catch {
+                alert("Invalid expression!");
             }
-        }
-        function removePassword() {
-            password = "";
-            alert("Password removed!");
-        }
-        function checkPassword() {
-            if (document.querySelector('.display').value === password) {
-                document.querySelector('.calculator').style.display = 'none';
-                document.querySelector('.file-manager').style.display = 'block';
-                document.querySelector('.back-btn').style.display = 'block';
-                clearDisplay();
-            }
-        }
-        function goBack() {
-            document.querySelector('.calculator').style.display = 'block';
-            document.querySelector('.file-manager').style.display = 'none';
-            document.querySelector('.back-btn').style.display = 'none';
         }
         function toggleMode() {
             document.body.classList.toggle('dark-mode');
@@ -181,6 +177,9 @@
         function toggleMenu() {
             const menu = document.querySelector('.menu-options');
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+        function showCategory(category) {
+            alert("Showing " + category);
         }
     </script>
 </body>
