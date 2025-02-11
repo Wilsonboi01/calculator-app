@@ -88,6 +88,9 @@
             display: none;
             cursor: pointer;
         }
+        .media-container {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -118,10 +121,15 @@
         <div class="file-manager">
             <button class="back-btn" onclick="goBack()">&#x3c;</button>
             <h2>File Manager</h2>
-            <input type="file" id="fileInput">
+            <input type="file" id="fileInput" accept="audio/*,video/*,image/*">
             <button onclick="saveFile()">Save File</button>
             <h3>Saved Files</h3>
             <ul id="fileList"></ul>
+            <div class="media-container">
+                <audio id="audioPlayer" controls style="display: none;"></audio>
+                <video id="videoPlayer" controls style="display: none; width: 100%;"></video>
+                <img id="imageDisplay" style="display: none; width: 100%;">
+            </div>
         </div>
     </div>
     <script>
@@ -158,20 +166,36 @@
         });
         function saveFile() {
             const fileInput = document.getElementById('fileInput');
-            if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name;
+            const file = fileInput.files[0];
+            if (file) {
+                const fileName = file.name;
                 const fileList = document.getElementById('fileList');
                 const listItem = document.createElement('li');
                 listItem.textContent = fileName;
+                listItem.onclick = function() { viewFile(file); };
                 fileList.appendChild(listItem);
                 alert('File saved successfully!');
             } else {
                 alert('No file selected!');
             }
         }
+        function viewFile(file) {
+            const url = URL.createObjectURL(file);
+            if (file.type.startsWith('audio')) {
+                document.getElementById('audioPlayer').src = url;
+                document.getElementById('audioPlayer').style.display = 'block';
+            } else if (file.type.startsWith('video')) {
+                document.getElementById('videoPlayer').src = url;
+                document.getElementById('videoPlayer').style.display = 'block';
+            } else if (file.type.startsWith('image')) {
+                document.getElementById('imageDisplay').src = url;
+                document.getElementById('imageDisplay').style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html>
+
 
 
 
