@@ -30,10 +30,14 @@
             border-radius: 5px;
             border: none;
         }
-        .buttons {
+        .buttons, .scientific {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 5px;
+        }
+        .scientific {
+            grid-template-columns: repeat(5, 1fr);
+            margin-bottom: 10px;
         }
         button {
             padding: 15px;
@@ -43,23 +47,8 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        .digits button {
-            background-color: blue;
-            color: white;
-        }
-        .operators button {
-            background-color: orange;
-            color: white;
-        }
-        .scientific {
-            grid-column: span 4;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 5px;
-            margin-bottom: 10px;
-        }
-        .scientific button {
-            background-color: gray;
+        .digits button, .operators button, .scientific button {
+            background-color: black;
             color: white;
         }
         .toggle-dark {
@@ -90,6 +79,14 @@
             background-color: black;
             color: white;
         }
+        .light-mode .digits button {
+            background-color: blue;
+            color: white;
+        }
+        .light-mode .operators button {
+            background-color: orange;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -102,29 +99,25 @@
             <button onclick="insert('cos(')">cos</button>
             <button onclick="insert('tan(')">tan</button>
             <button onclick="insert('log(')">log</button>
-            <button onclick="insert('√(')">√</button>
+            <button onclick="insert('Math.sqrt(')">√</button>
         </div>
         <div class="buttons">
-            <div class="digits">
-                <button onclick="insert('7')">7</button>
-                <button onclick="insert('8')">8</button>
-                <button onclick="insert('9')">9</button>
-                <button onclick="insert('4')">4</button>
-                <button onclick="insert('5')">5</button>
-                <button onclick="insert('6')">6</button>
-                <button onclick="insert('1')">1</button>
-                <button onclick="insert('2')">2</button>
-                <button onclick="insert('3')">3</button>
-                <button onclick="insert('0')">0</button>
-            </div>
-            <div class="operators">
-                <button onclick="insert('+')">+</button>
-                <button onclick="insert('-')">-</button>
-                <button onclick="insert('*')">*</button>
-                <button onclick="insert('/')">/</button>
-                <button onclick="calculate()">=</button>
-                <button onclick="clearDisplay()">C</button>
-            </div>
+            <button onclick="insert('7')">7</button>
+            <button onclick="insert('8')">8</button>
+            <button onclick="insert('9')">9</button>
+            <button class="operators" onclick="insert('+')">+</button>
+            <button onclick="insert('4')">4</button>
+            <button onclick="insert('5')">5</button>
+            <button onclick="insert('6')">6</button>
+            <button class="operators" onclick="insert('-')">-</button>
+            <button onclick="insert('1')">1</button>
+            <button onclick="insert('2')">2</button>
+            <button onclick="insert('3')">3</button>
+            <button class="operators" onclick="insert('*')">*</button>
+            <button onclick="insert('0')">0</button>
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="calculate()">=</button>
+            <button class="operators" onclick="insert('/')">/</button>
         </div>
     </div>
     <script>
@@ -143,7 +136,9 @@
         }
         document.querySelector('.toggle-dark').addEventListener('click', function() {
             document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
         });
     </script>
 </body>
 </html>
+
