@@ -144,21 +144,26 @@
    </div>
    
    <script>
-      function setPassword() {
-         const pass = prompt("Set a 4-8 digit password:");
-         if (pass && pass.length >= 4 && pass.length <= 8) {
-            localStorage.setItem("calcPass", pass);
-            alert("Password set successfully.");
-         } else {
-            alert("Invalid password length. Please enter 4-8 digits.");
+      function appendToDisplay(value) {
+         document.getElementById("display").value += value;
+      }
+      
+      function clearDisplay() {
+         document.getElementById("display").value = "";
+      }
+      
+      function submitInput() {
+         try {
+            document.getElementById("display").value = eval(document.getElementById("display").value);
+         } catch {
+            alert("Invalid Input");
          }
       }
-
-      function removePassword() {
-         localStorage.removeItem("calcPass");
-         alert("Password removed successfully.");
+      
+      function toggleLightMode() {
+         document.body.classList.toggle("light-mode");
       }
-
+      
       function toggleMenu() {
          const menu = document.getElementById("menuContent");
          menu.innerHTML = "";
