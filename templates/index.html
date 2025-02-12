@@ -21,7 +21,7 @@
       .display {
          width: 100%;
          height: 50px;
-         background: blue; /* Light mode digit box color */
+         background: blue;
          color: white;
          text-align: right;
          padding: 10px;
@@ -37,20 +37,10 @@
       .buttons button {
          height: 50px;
          font-size: 18px;
-         background: orange; /* Light mode sign box color */
+         background: orange;
          color: white;
          border: none;
          border-radius: 5px;
-         cursor: pointer;
-      }
-      .toggle-light {
-         position: absolute;
-         top: 10px;
-         left: 10px;
-         width: 20px;
-         height: 20px;
-         background: white;
-         border-radius: 50%;
          cursor: pointer;
       }
       .menu {
@@ -86,31 +76,29 @@
          border-radius: 10px;
          margin-top: 20px;
       }
-      .categories {
+      #fileActions {
          display: flex;
-         justify-content: space-around;
+         flex-direction: column;
+         gap: 10px;
          margin-bottom: 10px;
-      }
-      .category {
-         cursor: pointer;
-         font-weight: bold;
       }
       #savedFiles {
          list-style: none;
          padding: 0;
          text-align: left;
       }
+      #savedFiles li {
+         background: #444;
+         padding: 5px;
+         margin: 5px 0;
+         border-radius: 5px;
+      }
    </style>
 </head>
 <body>
-   <!-- Toggle Light and Hamburger Menu -->
-   <div class="toggle-light" onclick="toggleLightMode()"></div>
    <div class="menu" onclick="toggleMenu()">☰</div>
-   <div class="menu-content" id="menuContent">
-      <!-- Menu options will be updated dynamically -->
-   </div>
+   <div class="menu-content" id="menuContent"></div>
    
-   <!-- Calculator Container -->
    <div class="container" id="calculatorContainer">
       <input type="text" class="display" id="display" readonly>
       <div class="buttons">
@@ -128,75 +116,36 @@
          <button onclick="appendToDisplay('*')">*</button>
          <button onclick="appendToDisplay('0')">0</button>
          <button onclick="clearDisplay()">C</button>
-         <!-- The "=" button now calls submitInput() to either calculate or switch mode -->
          <button onclick="submitInput()">=</button>
          <button onclick="appendToDisplay('/')">/</button>
       </div>
    </div>
    
-   <!-- File Manager Container -->
    <div id="fileManager">
       <h2>File Manager</h2>
-      <div class="categories">
-         <span class="category" onclick="showCategory('files')">Files</span>
-         <span class="category" onclick="showCategory('music')">Music</span>
-         <span class="category" onclick="showCategory('videos')">Videos</span>
-         <span class="category" onclick="showCategory('photos')">Photos</span>
+      <div id="fileActions">
+         <input type="file" id="fileInput" multiple>
+         <button onclick="saveFile()">Save File</button>
+         <button onclick="unsaveFiles()">Unsave Files</button>
       </div>
-      <input type="file" id="fileInput" multiple accept="*/*">
-      <button onclick="saveFile()">Save File</button>
-      <button onclick="unsaveFiles()">Unsave Files</button>
       <ul id="savedFiles"></ul>
       <button onclick="closeFileManager()">&lt; Back</button>
    </div>
    
    <script>
-      // Toggle light mode colors
-      function toggleLightMode() {
-         // For simplicity, we'll just toggle a light mode flag and change styles accordingly
-         if (document.body.style.backgroundColor === 'white') {
-            document.body.style.backgroundColor = '#222';
-            document.body.style.color = 'white';
-            document.querySelector('.display').style.background = 'blue';
-         } else {
-            document.body.style.backgroundColor = 'white';
-            document.body.style.color = 'black';
-            document.querySelector('.display').style.background = 'black';
-         }
-      }
-      
-      // Update the menu based on the current mode
-      function updateMenu() {
-         const menu = document.getElementById("menuContent");
-         // Check if we're in calculator mode (container visible) or file manager mode
-         if (document.getElementById("calculatorContainer").style.display !== "none") {
-            // Calculator mode: show Set Password and Remove Password in a column
-            menu.innerHTML = '<button onclick="setPassword()">Set Password</button><button onclick="removePassword()">Remove Password</button>';
-         } else {
-            // File Manager mode: show Save File and Unsave Files in a column
-            menu.innerHTML = '<button onclick="saveFile()">Save File</button><button onclick="unsaveFiles()">Unsave Files</button>';
-         }
-      }
-      
       function toggleMenu() {
          const menu = document.getElementById("menuContent");
          menu.style.display = (menu.style.display === "block") ? "none" : "block";
-         updateMenu();
       }
       
-      // Append value to display
       function appendToDisplay(value) {
          document.getElementById("display").value += value;
       }
       
-      // Clear the display
       function clearDisplay() {
          document.getElementById("display").value = "";
       }
       
-      // Submit input from display:
-      // If the input matches the stored password, switch to file manager;
-      // Otherwise, evaluate the expression.
       function submitInput() {
          let input = document.getElementById("display").value;
          let storedPass = localStorage.getItem("calcPass");
@@ -210,82 +159,38 @@
                document.getElementById("display").value = "Error";
             }
          }
-         updateMenu();
       }
       
-      // Close file manager and return to calculator mode
       function closeFileManager() {
          document.getElementById("fileManager").style.display = "none";
          document.getElementById("calculatorContainer").style.display = "block";
-         updateMenu();
       }
       
-      // Set password (4-8 digits)
-      function setPassword() {
-         let pass = prompt("Enter a 4-8 digit password:");
-         if (pass && pass.length >= 4 && pass.length <= 8) {
-            localStorage.setItem("calcPass", pass);
-            alert("Password set successfully!");
-         } else {
-            alert("Invalid password length.");
-         }
-      }
+      let savedFiles = [];
       
-      // Remove password
-      function removePassword() {
-         localStorage.removeItem("calcPass");
-         alert("Password removed.");
-      }
-      
-      // File categorization object
-      let savedFiles = { files: [], music: [], videos: [], photos: [] };
-      
-      // Save files: categorizes files based on MIME type and displays them in a list
       function saveFile() {
          const fileInput = document.getElementById("fileInput");
          Array.from(fileInput.files).forEach(file => {
-            let category = "files";
-            if (file.type.startsWith("audio")) {
-               category = "music";
-            } else if (file.type.startsWith("video")) {
-               category = "videos";
-            } else if (file.type.startsWith("image")) {
-               category = "photos";
-            }
-            savedFiles[category].push(file.name);
+            savedFiles.push(file.name);
          });
          displaySavedFiles();
          alert("Files saved successfully!");
       }
       
-      // Unsave files: removes all files from a chosen category
       function unsaveFiles() {
-         let category = prompt("Enter category to unsave (files, music, videos, photos):");
-         if (savedFiles.hasOwnProperty(category)) {
-            savedFiles[category] = [];
-            displaySavedFiles();
-            alert("Files unsaved from " + category);
-         } else {
-            alert("Invalid category.");
-         }
+         savedFiles = [];
+         displaySavedFiles();
+         alert("All saved files have been removed.");
       }
       
-      // Display saved files in a list, showing their category
       function displaySavedFiles() {
          const list = document.getElementById("savedFiles");
          list.innerHTML = "";
-         for (let category in savedFiles) {
-            if (savedFiles[category].length > 0) {
-               let li = document.createElement("li");
-               li.textContent = category + ": " + savedFiles[category].join(", ");
-               list.appendChild(li);
-            }
-         }
-      }
-      
-      // Show saved files from a specific category via alert
-      function showCategory(category) {
-         alert("Saved " + category + ": " + (savedFiles[category].join(", ") || "None"));
+         savedFiles.forEach(file => {
+            let li = document.createElement("li");
+            li.textContent = file;
+            list.appendChild(li);
+         });
       }
    </script>
 </body>
