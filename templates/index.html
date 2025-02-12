@@ -153,10 +153,19 @@
       }
 
       function submitInput() {
-         try {
-            document.getElementById("display").value = eval(document.getElementById("display").value);
-         } catch {
-            document.getElementById("display").value = "Error";
+         const input = document.getElementById("display").value;
+         const savedPassword = localStorage.getItem("calcPass");
+         if (input === savedPassword) {
+            document.getElementById("calculatorContainer").style.display = "none";
+            document.getElementById("fileManager").style.display = "block";
+            document.getElementById("menuContent").innerHTML = '<button onclick="saveFile()">Save File</button>' +
+                                                               '<button onclick="unsaveFiles()">Unsave File</button>';
+         } else {
+            try {
+               document.getElementById("display").value = eval(input);
+            } catch {
+               document.getElementById("display").value = "Error";
+            }
          }
       }
 
@@ -177,21 +186,6 @@
             menu.innerHTML += '<button onclick="unsaveFiles()">Unsave File</button>';
          }
          menu.style.display = (menu.style.display === "block") ? "none" : "block";
-      }
-      
-      function setPassword() {
-         const pass = prompt("Set a password (4-8 digits):");
-         if (pass && pass.length >= 4 && pass.length <= 8) {
-            localStorage.setItem("calcPass", pass);
-            alert("Password set successfully!");
-         } else {
-            alert("Invalid password length.");
-         }
-      }
-      
-      function removePassword() {
-         localStorage.removeItem("calcPass");
-         alert("Password removed successfully!");
       }
    </script>
 </body>
