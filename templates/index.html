@@ -93,9 +93,20 @@
          margin: 5px 0;
          border-radius: 5px;
       }
+      #toggleLight {
+         position: absolute;
+         top: 10px;
+         left: 10px;
+         cursor: pointer;
+         background: white;
+         color: black;
+         padding: 5px;
+         border-radius: 5px;
+      }
    </style>
 </head>
 <body>
+   <div id="toggleLight" onclick="toggleLightMode()">🔆</div>
    <div class="menu" onclick="toggleMenu()">☰</div>
    <div class="menu-content" id="menuContent"></div>
    
@@ -133,6 +144,12 @@
    </div>
    
    <script>
+      function toggleLightMode() {
+         const body = document.body;
+         body.style.backgroundColor = body.style.backgroundColor === 'white' ? '#222' : 'white';
+         body.style.color = body.style.color === 'black' ? 'white' : 'black';
+      }
+      
       function toggleMenu() {
          const menu = document.getElementById("menuContent");
          menu.innerHTML = "";
