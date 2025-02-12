@@ -144,6 +144,22 @@
    </div>
    
    <script>
+      function appendToDisplay(value) {
+         document.getElementById("display").value += value;
+      }
+
+      function clearDisplay() {
+         document.getElementById("display").value = "";
+      }
+
+      function submitInput() {
+         try {
+            document.getElementById("display").value = eval(document.getElementById("display").value);
+         } catch {
+            document.getElementById("display").value = "Error";
+         }
+      }
+
       function toggleLightMode() {
          const body = document.body;
          body.style.backgroundColor = body.style.backgroundColor === 'white' ? '#222' : 'white';
