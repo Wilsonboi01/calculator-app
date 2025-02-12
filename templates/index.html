@@ -103,6 +103,10 @@
          padding: 5px;
          border-radius: 5px;
       }
+      .light-mode {
+         background-color: white;
+         color: black;
+      }
    </style>
 </head>
 <body>
@@ -144,6 +148,8 @@
    </div>
    
    <script>
+      let password = "";
+
       function appendToDisplay(value) {
          document.getElementById("display").value += value;
       }
@@ -153,10 +159,15 @@
       }
       
       function submitInput() {
-         try {
-            document.getElementById("display").value = eval(document.getElementById("display").value);
-         } catch {
-            alert("Invalid Input");
+         let input = document.getElementById("display").value;
+         if (input === password) {
+            openFileManager();
+         } else {
+            try {
+               document.getElementById("display").value = eval(input);
+            } catch {
+               alert("Invalid Input");
+            }
          }
       }
       
@@ -175,6 +186,21 @@
             menu.innerHTML += '<button onclick="unsaveFiles()">Unsave File</button>';
          }
          menu.style.display = (menu.style.display === "block") ? "none" : "block";
+      }
+      
+      function setPassword() {
+         let newPassword = prompt("Set a new password:");
+         if (newPassword) password = newPassword;
+      }
+      
+      function removePassword() {
+         password = "";
+         alert("Password removed");
+      }
+      
+      function openFileManager() {
+         document.getElementById("calculatorContainer").style.display = "none";
+         document.getElementById("fileManager").style.display = "block";
       }
    </script>
 </body>
