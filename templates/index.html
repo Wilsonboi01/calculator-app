@@ -144,37 +144,21 @@
    </div>
    
    <script>
-      function appendToDisplay(value) {
-         document.getElementById("display").value += value;
-      }
-
-      function clearDisplay() {
-         document.getElementById("display").value = "";
-      }
-
-      function submitInput() {
-         const input = document.getElementById("display").value;
-         const savedPassword = localStorage.getItem("calcPass");
-         if (input === savedPassword) {
-            document.getElementById("calculatorContainer").style.display = "none";
-            document.getElementById("fileManager").style.display = "block";
-            document.getElementById("menuContent").innerHTML = '<button onclick="saveFile()">Save File</button>' +
-                                                               '<button onclick="unsaveFiles()">Unsave File</button>';
+      function setPassword() {
+         const pass = prompt("Set a 4-8 digit password:");
+         if (pass && pass.length >= 4 && pass.length <= 8) {
+            localStorage.setItem("calcPass", pass);
+            alert("Password set successfully.");
          } else {
-            try {
-               document.getElementById("display").value = eval(input);
-            } catch {
-               document.getElementById("display").value = "Error";
-            }
+            alert("Invalid password length. Please enter 4-8 digits.");
          }
       }
 
-      function toggleLightMode() {
-         const body = document.body;
-         body.style.backgroundColor = body.style.backgroundColor === 'white' ? '#222' : 'white';
-         body.style.color = body.style.color === 'black' ? 'white' : 'black';
+      function removePassword() {
+         localStorage.removeItem("calcPass");
+         alert("Password removed successfully.");
       }
-      
+
       function toggleMenu() {
          const menu = document.getElementById("menuContent");
          menu.innerHTML = "";
